@@ -128,10 +128,20 @@ const register = async (req, res) => {
 }
 
 const forgotPassword = async (req, res) => {
+    // TEMP DEBUG — remove after diagnosing deploy hang
+    console.log("[DEBUG forgotPassword] Controller entry", {
+        email: req.body?.email,
+        hasMailFrom: Boolean(KEYS.MAIL_FROM),
+        smtpHost: KEYS.BREVO_SMTP_HOST,
+        smtpPort: KEYS.BREVO_SMTP_PORT,
+        clientUrl: KEYS.CLIENT_URL,
+    });
+
     try {
         const { email } = req.body;
 
         if (!email) {
+            console.log("[DEBUG forgotPassword] Before res 400 — email required");
             return res.status(BAD_REQUEST).json({
                 status: "error",
                 message: "Email is required"
@@ -139,9 +149,14 @@ const forgotPassword = async (req, res) => {
         }
 
         const user = await userModel.findOne({ email: String(email).trim() });
+        console.log("[DEBUG forgotPassword] After user lookup", {
+            found: Boolean(user),
+            userId: user?._id?.toString(),
+        });
 
         // Prevent email enumeration
         if (!user) {
+            console.log("[DEBUG forgotPassword] Before res 200 — user not found (enumeration-safe)");
             return res.status(OK).json({
                 status: "success",
                 message: "If an account exists with this email, a password reset link has been sent."
@@ -154,18 +169,29 @@ const forgotPassword = async (req, res) => {
             KEYS.JWT_SECRET,
             { expiresIn: "10m" }
         );
+        console.log("[DEBUG forgotPassword] After JWT generation", {
+            tokenLength: resetToken?.length,
+        });
 
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
 
         await user.save();
+        console.log("[DEBUG forgotPassword] After user.save()");
 
         // Frontend route is /auth/reset-password
         const resetLink = `${KEYS.CLIENT_URL}/auth/reset-password?token=${encodeURIComponent(resetToken)}`;
 
         try {
+            console.log("[DEBUG forgotPassword] Before sendResetPasswordEmail()", {
+                to: user.email,
+                resetLinkHost: KEYS.CLIENT_URL,
+            });
             await sendResetPasswordEmail(user.email, resetLink);
+            console.log("[DEBUG forgotPassword] After sendResetPasswordEmail() resolved");
         } catch (mailError) {
+            console.error("[DEBUG forgotPassword] Catch mailError:", mailError);
+
             // Don't leave a usable token if email failed
             user.resetPasswordToken = null;
             user.resetPasswordExpires = null;
@@ -173,18 +199,22 @@ const forgotPassword = async (req, res) => {
 
             console.error("Forgot-password email failed:", mailError);
 
+            console.log("[DEBUG forgotPassword] Before res 500 — mail failed");
             return res.status(INTERNAL_SERVER_ERROR).json({
                 status: "error",
                 message: mailError.message || "Failed to send reset email",
             });
         }
 
+        console.log("[DEBUG forgotPassword] Before res 200 — success");
         return res.status(OK).json({
             status: "success",
             message: "If an account exists with this email, a password reset link has been sent.",
         });
 
     } catch (error) {
+        console.error("[DEBUG forgotPassword] Catch outer error:", error);
+        console.log("[DEBUG forgotPassword] Before res 500 — outer catch");
         return res.status(INTERNAL_SERVER_ERROR).json({
             status: "error",
             message: error.message || "Internal server error"
