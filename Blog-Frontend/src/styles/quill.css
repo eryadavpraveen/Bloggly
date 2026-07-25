@@ -1,0 +1,10 @@
+.quill-editor .ql-editor {
+    min-height: 144px;
+    height: auto;
+    overflow-y: hidden;
+}
+
+.quill-editor .ql-container {
+    min-height: 144px;
+    height: auto;
+}
