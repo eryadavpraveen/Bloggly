@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = async ({ to, subject, html, text }) => {
-    if (!KEYS.BREVO_SMTP_USER || !KEYS.BREVO_SMTP_PASS) {
+    if (!KEYS.BREVO_SMTP_HOST || !KEYS.BREVO_SMTP_USER || !KEYS.BREVO_SMTP_PASS) {
         throw new Error("Email SMTP credentials are not configured");
     }
 

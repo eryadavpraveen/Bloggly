@@ -171,6 +171,8 @@ const forgotPassword = async (req, res) => {
             user.resetPasswordExpires = null;
             await user.save();
 
+            console.error("Forgot-password email failed:", mailError);
+
             return res.status(INTERNAL_SERVER_ERROR).json({
                 status: "error",
                 message: mailError.message || "Failed to send reset email",
