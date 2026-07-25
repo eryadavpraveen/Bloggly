@@ -8,6 +8,7 @@ const KEYS = {
     CLOUDINARY_FOLDER: process.env.CLOUDINARY_FOLDER,
 
     CLIENT_URL: process.env.CLIENT_URL?.trim().replace(/\/$/, ""),
+    BREVO_API_KEY: process.env.BREVO_API_KEY,
     BREVO_SMTP_HOST: process.env.BREVO_SMTP_HOST,
     BREVO_SMTP_PORT: process.env.BREVO_SMTP_PORT || 587,
     BREVO_SMTP_USER: process.env.BREVO_SMTP_USER,
