@@ -17,12 +17,23 @@ app.set("trust proxy", 1);
 // connect to DB
 connectDB();
 
-app.use(cors())
 
-// app.use(cors({
-//     origin: "*",
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-// }));
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.CLIENT_URL,
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+}));
+
 
 app.use(helmet({
     crossOriginResourcePolicy: false
