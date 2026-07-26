@@ -3,6 +3,8 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -127,4 +129,18 @@
   html {
     @apply font-sans;
     }
+}
+
+/* Quill 2 stores bullets inside <ol> with data-list; restore markers on view pages */
+.prose li[data-list="bullet"] {
+    list-style-type: disc;
+}
+
+.prose li[data-list="ordered"] {
+    list-style-type: decimal;
+}
+
+.prose li[data-list="checked"],
+.prose li[data-list="unchecked"] {
+    list-style-type: none;
 }

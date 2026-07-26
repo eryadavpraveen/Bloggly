@@ -320,7 +320,7 @@ const ViewBlog = ({ isPublicPage = false }) => {
                         <Card>
                             <CardContent className="pt-6">
                                 <div
-                                    className="prose max-w-none"
+                                    className="prose prose-neutral max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-li:my-1"
                                     dangerouslySetInnerHTML={{
                                         __html: (BLOG_DATA.content || "").replace(/&nbsp;/g, " "),
                                     }}
