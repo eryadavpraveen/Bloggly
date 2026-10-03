@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 import ScrollToTop from "@/components/ScrollToTop";
 import LoginDialog from "@/components/dialogs/LoginDialog";
 import PrivateRoute from '@/components/PrivateRoute'
+import GuestRoute from '@/components/GuestRoute'
 
 
 
@@ -23,24 +24,32 @@ const App = () => {
             <Routes>
 
                 <Route path='/auth/login' element={
-                    <RootLayout>
-                        <Login />
-                    </RootLayout>
+                    <GuestRoute>
+                        <RootLayout>
+                            <Login />
+                        </RootLayout>
+                    </GuestRoute>
                 } />
                 <Route path='/auth/register' element={
-                    <RootLayout>
-                        <Register />
-                    </RootLayout>
+                    <GuestRoute>
+                        <RootLayout>
+                            <Register />
+                        </RootLayout>
+                    </GuestRoute>
                 } />
                 <Route path='/auth/forgot-password' element={
-                    <RootLayout>
-                        <ForgotPassword />
-                    </RootLayout>
+                    <GuestRoute>
+                        <RootLayout>
+                            <ForgotPassword />
+                        </RootLayout>
+                    </GuestRoute>
                 } />
                 <Route path='/auth/reset-password' element={
-                    <RootLayout>
-                        <ResetPassword />
-                    </RootLayout>
+                    <GuestRoute>
+                        <RootLayout>
+                            <ResetPassword />
+                        </RootLayout>
+                    </GuestRoute>
                 } />
 
                 {/* /** Home Routes */}
