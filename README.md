@@ -3,6 +3,7 @@
 **Full-Stack Blogging & Content Publishing Platform**  
 **Year:** 2026  
 **Author:** Praveen Yadav
+**URL:** https://bloggly-psi.vercel.app/
 
 ---
 
