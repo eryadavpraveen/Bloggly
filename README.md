@@ -179,5 +179,3 @@ Bloggly/
 ```
 
 ---
-
-*End of documentation — approximately two pages when printed (standard formatting).*
